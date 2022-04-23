@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    function __construct()
+    {
+        $this -> middleware('verified');
+    }
     function CategoryList(){
         $categories = Category :: paginate();
         $trash_category = Category :: onlyTrashed()-> paginate(2);
@@ -25,7 +29,7 @@ class CategoryController extends Controller
         // ]);
         
         $req -> validate([
-            'category_name' => ['required', 'unique:categories']
+            'category_name' => ['required', 'unique:categories', 'regex:/^[a-zA-Z, \-]*$/']
         ],[
                 'category_name.required' => 'Enter any name please'
             ]
